@@ -1,24 +1,29 @@
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-         //size of the given array:
-    int n = nums.size();
+        // moore's voting algo
+        int n = nums.size();
+    int cnt = 0; // count
+    int el; // Element
 
-    //declaring a map:
-    map<int, int> mpp;
-
-    //storing the elements with its occurnce:
+    //applying the algorithm:
     for (int i = 0; i < n; i++) {
-        mpp[nums[i]]++;
-    }
-
-    //searching for the majority element:
-    for (auto it : mpp) {
-        if (it.second > (n / 2)) {
-            return it.first;
+        if (cnt == 0) {
+            cnt = 1;
+            el = nums[i];
         }
+        else if (el == nums[i]) cnt++;
+        else cnt--;
     }
 
+    //checking if the stored element
+    // is the majority element:
+    int cnt1 = 0;
+    for (int i = 0; i < n; i++) {
+        if (nums[i] == el) cnt1++;
+    }
+
+    if (cnt1 > (n / 2)) return el;
     return -1;
     }
 };
