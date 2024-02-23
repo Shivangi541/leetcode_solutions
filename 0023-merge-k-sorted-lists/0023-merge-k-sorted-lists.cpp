@@ -1,59 +1,51 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
 class Solution {
+private:
+    // using this stuct to compare the data of the node, bcz we are storing the list into the Priority Queue
+    struct compare {
+        bool operator()(const ListNode* l, const ListNode* r) {
+            return l->val > r->val;
+        }
+    };
+    
 public:
-     ListNode* mergeTwoList(ListNode* head1, ListNode* head2) 
-    {
-        if (!head1)
-            return head2;
-        if (!head2)
-            return head1;
-        ListNode* ans = new ListNode(-1);
-        ListNode* ptr = ans;
-        while (head1 && head2) 
-        {
-            if (head1->val < head2->val) 
-            {
-                ptr->next = head1;
-                ptr = ptr->next;
-                head1 = head1->next;
-            } 
-            else 
-            {
-                ptr->next = head2;
-                ptr = ptr->next;
-                head2 = head2->next;
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        
+        // using pq to store the nodes in the ascending order, by default priority queue stores elements into ascending order only
+        priority_queue<ListNode*, vector<ListNode*>, compare> pq;
+        
+        // storing the first node of every k lists into pq
+        for(int itr = 0; itr < lists.size(); itr++){
+            if(lists[itr]) pq.push(lists[itr]);
+        }
+        
+        // Using a dummy list to store the result
+        ListNode* dummy = new ListNode(0);
+        
+        // using the res list to return the result
+        ListNode* res = dummy;
+        
+        // iterating over the pq, and storing the nodes into dummy, and if particular kth node is having more nodes then storing those nodes into the pq
+        while(pq.size()){
+
+            // getting the node which is on the top of pq, bcz that will be our smallest node
+            ListNode* temp = pq.top();
+            
+            // removing the top node
+            pq.pop();
+            
+            // storing the temp node into dummy
+            dummy->next = temp;
+            
+            // moving dummy one step ahead
+            dummy = dummy->next;
+            
+            // if particular kth node(temp) is having more nodes then storing the node into the pq
+            if(temp->next){
+                pq.push(temp->next);
             }
         }
-        while (head1) 
-        {
-            ptr->next = head1;
-            ptr = ptr->next;
-            head1 = head1->next;
-        }
-        while (head2) 
-        {
-            ptr->next = head2;
-            ptr = ptr->next;
-            head2 = head2->next;
-        }
-        return ans->next;
-    }
-    ListNode* mergeKLists(vector<ListNode*>& lists) 
-    {
-        if (lists.size() == 0)
-            return NULL;
-        ListNode* head1 = lists[0];
-        for (int i = 1; i < lists.size(); i++) 
-            head1 = mergeTwoList(head1, lists[i]);
-        return head1;
+        
+        // returning the result
+        return res->next;
     }
 };
