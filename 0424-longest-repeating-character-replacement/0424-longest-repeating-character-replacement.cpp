@@ -1,24 +1,20 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
-         int result=0;
-        int left=0;
-        vector<int> inwindow(26); //frequency table for characters inside our window
-        int maxCnt=0;
-        for(int right=0; right<s.size(); ++right) {
-            //add right element
-            inwindow[s[right]-'A']++;
-            //
-            //int maxCnt=*max_element(inwindow.begin(), inwindow.end());
-            maxCnt = max(maxCnt, inwindow[s[right]-'A']); //optimization
-            //window length = right-left+1
-            //window length must not be > than maxCnt+k
-            if (right-left+1>maxCnt+k) { //move left pointer if needed
-                inwindow[s[left]-'A']--;
-                left++;
+        vector<int> count(26, 0);
+        int i = 0, j = 0, maxCount = 0;
+        int result = 0;
+        while (i < s.length()) {
+            count[s[i] - 'A']++;
+            maxCount = max(maxCount, count[s[i] - 'A']);
+            if (i - j + 1 - maxCount > k) {
+                count[s[j] - 'A']--;
+                j++;
             }
-            result=max(result, right-left+1);
+            result = max(result, i - j + 1);
+            i++;
         }
         return result;
+
     }
 };
