@@ -1,25 +1,15 @@
 class Solution {
 public:
     int numberOfSubstrings(string s) {
-        int left = 0 , right = 0 , end = s.size() - 1;
-        unordered_map<char,int> map;
-        
-        int count = 0;
-        
-        while(right != s.size())
-        {
-            map[s[right]] += 1; // adding new element to window
-            
-            while(map['a'] and map['b'] and map['c']) // while(window is good)
-            {
-                count += 1 + (end - right);
-                
-				// removing first element[means shrinking window from front to form new window]
-                map[s[left]] -= 1; 
-                left++;
+        int ans = 0;
+        vector<int> seen(3, -1);
+
+        for(int i=0; i<s.length(); i++){
+            seen[s[i]-'a'] = i;
+            if( seen[0]!=-1 && seen[1]!=-1 && seen[2]!=-1 ){
+                ans = ans + 1 + min(seen[0], min(seen[1], seen[2]));
             }
-            right++;
         }
-        return count;
+        return ans;        
     }
 };
