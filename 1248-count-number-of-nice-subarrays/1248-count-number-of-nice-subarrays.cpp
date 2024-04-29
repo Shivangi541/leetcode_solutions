@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int numberOfSubarrays(vector<int>& nums, int k) {
+        return slidingWindowAtMost(nums, k) - slidingWindowAtMost(nums, k - 1);
+    }
+    
+        int slidingWindowAtMost(vector<int> &nums, int goal){
+        int start = 0, currentSum = 0, totalCount = 0; 
+        
+        // Iterate through the array using a sliding window approach
+        for (int end = 0; end < nums.size(); end++) {
+            currentSum += nums[end]%2;
+            
+            // Adjust the window by moving the start pointer to the right
+            // until the sum becomes less than or equal to the goal
+            while (start <= end && currentSum > goal) {
+                currentSum -= nums[start++]%2;
+            }
+
+            // Update the total count by adding the length of the current subarray
+            totalCount += end - start + 1;
+        }
+        return totalCount;
+    }
+};
