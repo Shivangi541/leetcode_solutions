@@ -1,24 +1,18 @@
 class Solution {
 public:
-    int t[10001];
-    bool solve(vector<int>& nums, int n, int idx) {
-        if(idx == n-1)
-            return true;
-        
-        if(t[idx] != -1)
-            return t[idx];
-        
-        for(int i = 1; i <= nums[idx]; i++) {
-            if(solve(nums, n, idx+i))
-                return t[idx] = true;
-        }
-    
-        return t[idx] = false;
-    }
-    
     bool canJump(vector<int>& nums) {
         int n = nums.size();
-        memset(t, -1, sizeof(t));
-        return solve(nums, n, 0);
+        int reach = 0;
+        for (int i = 0; i < n; i++) {
+            // (i > reach) will cover [1,1,0,1,2] or [0,0,0....]
+            if(i > reach || reach >= n-1)
+                break;
+            //this reach will store upto which index we can jump from that ith index
+            reach = max(reach, i + nums[i]);
+        }
+        if (reach >= n-1)
+            return true;
+        //this "return false" means definitely (i > reach) at any point
+        return false;
     }
 };
