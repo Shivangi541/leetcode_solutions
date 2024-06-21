@@ -19,8 +19,8 @@ public:
             totalSum += num;  
         }
 
-        if (totalSum == minSum) {
-            return maxSum;
+         if (totalSum == minSum) {
+           return maxSum;
         }
         
         return max(maxSum, totalSum - minSum);
